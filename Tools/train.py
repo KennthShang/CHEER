@@ -1,0 +1,116 @@
+import numpy as np
+import torch
+import torch.utils.data as Data
+from torch import nn
+from model import Wcnn
+
+
+# Accuarcy function
+def accuracy(pred, label):
+    correct_pred = np.equal(np.argmax(pred, 1), label)
+    acc = np.mean(correct_pred)
+    return acc
+
+"""
+===============================================================
+                        Data Part
+===============================================================
+"""
+
+torch_embeds = nn.Embedding(64, 100)
+torch_embeds.load_state_dict(torch.load('../embed.pkl'))
+torch_embeds.weight.requires_grad=False
+
+
+train = np.genfromtxt('dataset/train.csv', delimiter=',')
+train_label = train[:, -1]
+train_feature = train[:, :-1]
+
+train_feature = torch.from_numpy(train_feature).long()
+train_label = torch.from_numpy(train_label).float()
+train_feature = torch_embeds(train_feature)
+train_feature = train_feature.reshape(len(train_feature), 1, 248, 100)
+train_dataset = Data.TensorDataset(train_feature, train_label)
+training_loader = Data.DataLoader(
+    dataset=train_dataset,    # torch TensorDataset format
+    batch_size=200,           # mini batch size
+    shuffle=True,               
+    num_workers=1,              
+)
+
+
+val = np.genfromtxt('dataset/val.csv', delimiter=',')
+val_label = val[:, -1]
+val_feature = val[:, :-1]
+
+val_feature = torch.from_numpy(val_feature).long()
+val_label = torch.from_numpy(val_label).float()
+val_feature = torch_embeds(val_feature)
+val_feature = val_feature.reshape(len(val_feature), 1, 248, 100)
+
+val_dataset = Data.TensorDataset(val_feature, val_label)
+validation_loader = Data.DataLoader(
+    dataset=val_dataset,      # torch TensorDataset format
+    batch_size=200,           # mini batch size
+    shuffle=False,               
+    num_workers=1,              
+)
+
+
+"""
+===============================================================
+                        Model Part
+===============================================================
+
+"""
+# CrossEntropyLoss
+torch.cuda.set_device(3)
+net = Wcnn.WCNN(num_token=100,num_class=5, kernel_sizes=[3, 7, 11, 15], kernel_nums=[256, 256, 256, 256])
+optimizer = torch.optim.Adam(net.parameters(), lr=0.001)
+loss_func = torch.nn.CrossEntropyLoss(torch.tensor([1, 1, 1, 1, 1]).float().cuda())
+net = net.cuda()
+
+max_acc_val = -1
+# Training
+for epoch in range(10):
+    net = net.train()
+    acc = []
+    for step, (batch_x, batch_y) in enumerate(training_loader): 
+        batch_x = batch_x.cuda()
+        batch_y = batch_y.cuda()
+        # Predict
+        prediction = net(batch_x)
+        loss = loss_func(prediction, batch_y.long())
+        optimizer.zero_grad()
+        loss.backward() 
+        optimizer.step()
+    print("\n\nEpoch no.: " +str(epoch))
+    net = net.eval()
+    with torch.no_grad():
+        acc = []
+        for step, (batch_x, batch_y) in enumerate(training_loader): 
+            batch_x = batch_x.cuda()
+            batch_y = batch_y.cuda()
+            prediction = net(batch_x)
+            tmp = accuracy(prediction.cpu().detach().numpy(), batch_y.cpu().numpy())
+            acc.append(tmp)
+    print("Training loss: " + str(loss.cpu().detach().numpy())[:4] + "\nTraining acc: " +str(np.mean(acc))[:4])
+    # Validation
+    with torch.no_grad():
+        acc = []
+        for step, (batch_x, batch_y) in enumerate(validation_loader): 
+            batch_x = batch_x.cuda()
+            batch_y = batch_y.cuda()
+            prediction = net(batch_x)
+            tmp = accuracy(prediction.cpu().detach().numpy(), batch_y.cpu().numpy())
+            acc.append(tmp)
+    acc = np.mean(acc)
+    print("Validation acc: " +str(acc)[:4])
+    if acc > max_acc_val:
+        max_acc_val = acc
+        torch.save(net.state_dict(), 'Picornavirales_params.pkl')
+        print("params stored!")
+
+
+
+
