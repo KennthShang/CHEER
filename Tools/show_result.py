@@ -3,14 +3,35 @@ import torch
 import torch.utils.data as Data
 from torch import nn
 from model import Wcnn
+import argparse
+
+
+
+"""
+===============================================================
+                        Input Params
+===============================================================
+"""
+
+parser = argparse.ArgumentParser(description='manual to this script')
+parser.add_argument('--gpus', type=int, default = 1)
+parser.add_argument('--num_class', type=int, default=5)
+parser.add_argument('--kmers', type=str, default='3,7,11,15')
+parser.add_argument('--t', type=float, default=0.6)
+args = parser.parse_args()
+
+kmers = args.kmers
+kmers = kmers.split(',')
+kmers = list(map(int, kmers))
+
 
 """
 ===========================================================
                 Load Trained Model
 ===========================================================
 """
-torch.cuda.set_device(1)
-cnn = Wcnn.WCNN(num_token=100,num_class=2,kernel_sizes=[3, 7, 11, 15], kernel_nums=[256, 256, 256, 256])
+torch.cuda.set_device(args.gpus)
+cnn = Wcnn.WCNN(num_token=100,num_class=args.num_class,kernel_sizes=kmers, kernel_nums=[256, 256, 256, 256])
 #cnn = Wcnn.WCNN(num_token=100,num_class=20,kernel_sizes=[3, 7, 11, 15], kernel_nums=[256, 256, 256, 256], seq_len=244)
 pretrained_dict=torch.load("Reject_params.pkl", map_location='cpu')
 cnn.load_state_dict(pretrained_dict)
@@ -47,37 +68,18 @@ val_feature = val_feature.reshape(len(val_feature), 1, 248, 100)
                 Record Confusion Matrix
 ===========================================================
 """
-record = np.zeros((7, 7))
-with torch.no_grad():
-    for (feature, label) in zip(val_feature, val_label):
-        pred = cnn(torch.unsqueeze(feature.cuda(), 0))
-        pred = pred.cpu().detach().numpy()[0]
-        y = int(np.argmax(pred))
-        x = int(label)
-        record[x, y] += 1
-
-
-np.set_printoptions(suppress=True)
-record
-sum(record.diagonal())/sum(sum(record))
-
-
-
 def softmax(x):
     return np.exp(x)/sum(np.exp(x))
 
-record = np.zeros((7, 7))
-with torch.no_grad():
-    for (feature, label) in zip(val_feature, val_label):
-        pred = cnn(torch.unsqueeze(feature.cuda(), 0))
-        pred = pred.cpu().detach().numpy()[0]
-        pred = softmax(pred)
-        if max(pred) > 0.8:
-            y = int(np.argmax(pred))
-            x = int(label)
-            record[x, y] += 1
-
-
-np.set_printoptions(suppress=True)
-record
-sum(record.diagonal())/sum(sum(record))
+with open("result.txt", 'w') as file:
+    idx = 1
+    prediction = []
+    with torch.no_grad():
+        for (feature, label) in zip(val_feature, val_label):
+            pred = cnn(torch.unsqueeze(feature.cuda(), 0))
+            pred = pred.cpu().detach().numpy()[0]
+            pred = softmax(pred)
+            if max(pred) > arg.t:
+                y = int(np.argmax(pred))
+                file.write("id:" + str(idx) + "-> prediction:" + str(y))
+                idx+=1
