@@ -2,7 +2,7 @@ import sys
 import os
 
 def create_reads(file_name):
-    file = open("../train/"+file_name)
+    file = open("../validation/"+file_name)
     genomes = []
     seq = ""
     data = file.readlines()
@@ -26,13 +26,13 @@ def create_reads(file_name):
 
             reads.append(genome[i:i+250])
 
-    with open("../stride0_train/"+file_name, 'w') as file:
+    with open("../stride0_val/"+file_name, 'w') as file:
         for read in reads:
             file.write(read +'\n')
         file.close()
 
 if __name__ == "__main__":
-    path = "../train/"
+    path = "../validation/"
     name_list = os.listdir(path)
     for name in name_list:
         create_reads(name)

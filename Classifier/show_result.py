@@ -18,6 +18,8 @@ parser.add_argument('--gpus', type=int, default = 1)
 parser.add_argument('--num_class', type=int, default=5)
 parser.add_argument('--kmers', type=str, default='3,7,11,15')
 parser.add_argument('--t', type=float, default=0.6)
+parser.add_argument('--embed', type=string, default="embed.pkl")
+parser.add_argument('--classifier', type=string, default="Reject_params.pkl")
 args = parser.parse_args()
 
 kmers = args.kmers
@@ -33,7 +35,7 @@ kmers = list(map(int, kmers))
 torch.cuda.set_device(args.gpus)
 cnn = Wcnn.WCNN(num_token=100,num_class=args.num_class,kernel_sizes=kmers, kernel_nums=[256, 256, 256, 256])
 #cnn = Wcnn.WCNN(num_token=100,num_class=20,kernel_sizes=[3, 7, 11, 15], kernel_nums=[256, 256, 256, 256], seq_len=244)
-pretrained_dict=torch.load("Reject_params.pkl", map_location='cpu')
+pretrained_dict=torch.load(args.classifier, map_location='cpu')
 cnn.load_state_dict(pretrained_dict)
 
 # Evaluation mode
@@ -42,7 +44,7 @@ cnn = cnn.cuda()
 
 # Load embedding
 torch_embeds = nn.Embedding(64, 100)
-torch_embeds.load_state_dict(torch.load('embed.pkl', map_location='cpu'))
+torch_embeds.load_state_dict(torch.load(args.embed, map_location='cpu'))
 torch_embeds.weight.requires_grad=False
 
 

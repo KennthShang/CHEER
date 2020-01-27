@@ -1,4 +1,0 @@
-python create_reads_train.py
-python filter_reads_train.py
-python read2int_train.py
-python create_dataset_train.py

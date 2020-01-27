@@ -3,7 +3,7 @@ import os
 
 def filter_reads(pos, file_name):
     with open(pos+file_name) as f_in:
-        with open("../filtered_train/"+file_name.split(".")[0]+"_new.fasta", 'w') as f_out:
+        with open("../filtered_val/"+file_name.split(".")[0]+"_new.fasta", 'w') as f_out:
             for read in f_in.readlines():
                 one_hot = []
                 flag = 0
@@ -24,7 +24,7 @@ def filter_reads(pos, file_name):
 
 
 if __name__ == "__main__":
-    load_path = "../stride0_train/"
+    load_path = "../stride0_val/"
     
     name_list = os.listdir(load_path)
     for name in name_list:
