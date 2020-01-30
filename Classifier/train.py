@@ -14,10 +14,11 @@ import argparse
 
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('--gpus', type=int, default = 1)
-parser.add_argument('--num_class', type=int, default=5)
+parser.add_argument('--n', type=int, default=5)
 parser.add_argument('--kmers', type=str, default='3,7,11,15')
 parser.add_argument('--lr', type=str, default=0.001)
 parser.add_argument('--epoch', type=str, default=5)
+parser.add_argument('--embed', type=str, default='embed.pkl')
 parser.add_argument('--weight', type=str, default='1,1,1,1,1')
 args = parser.parse_args()
 
@@ -91,7 +92,7 @@ validation_loader = Data.DataLoader(
 """
 # CrossEntropyLoss
 torch.cuda.set_device(args.gpus)
-net = Wcnn.WCNN(num_token=100,num_class=args.num_class, kernel_sizes=kmers, kernel_nums=[256, 256, 256, 256])
+net = Wcnn.WCNN(num_token=100,num_class=args.n, kernel_sizes=kmers, kernel_nums=[256, 256, 256, 256])
 optimizer = torch.optim.Adam(net.parameters(), lr=args.lr)
 loss_func = torch.nn.CrossEntropyLoss(torch.tensor(weight).float().cuda())
 net = net.cuda()
