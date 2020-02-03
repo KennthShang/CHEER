@@ -20,11 +20,12 @@ def create_reads(file_name):
 
     reads = []
     for genome in genomes:
-        for i in range(0, len(genome),50):
+        for i in range(0, len(genome),250):
             if i + 250 > len(genome):
                 break
 
             reads.append(genome[i:i+250])
+            break
 
     with open("../stride0_val/"+file_name, 'w') as file:
         for read in reads:
