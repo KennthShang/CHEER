@@ -15,11 +15,11 @@ import argparse
 
 parser = argparse.ArgumentParser(description='manual to this script')
 parser.add_argument('--gpus', type=int, default = 1)
-parser.add_argument('--n', type=int, default=5)
+parser.add_argument('--n', type=int, default=2)
 parser.add_argument('--kmers', type=str, default='3,7,11,15')
 parser.add_argument('--t', type=float, default=0.6)
-parser.add_argument('--embed', type=string, default="embed.pkl")
-parser.add_argument('--classifier', type=string, default="Reject_params.pkl")
+parser.add_argument('--embed', type=str, default="embed.pkl")
+parser.add_argument('--classifier', type=str, default="Reject_params.pkl")
 args = parser.parse_args()
 
 kmers = args.kmers
@@ -73,16 +73,19 @@ val_feature = val_feature.reshape(len(val_feature), 1, 248, 100)
 def softmax(x):
     return np.exp(x)/sum(np.exp(x))
 
-with open("result.txt", 'w') as file:
-    idx = 1
-    prediction = []
-    with torch.no_grad():
-        for (feature, label) in zip(val_feature, val_label):
-            pred = cnn(torch.unsqueeze(feature.cuda(), 0))
-            pred = pred.cpu().detach().numpy()[0]
-            pred = softmax(pred)
-            if max(pred) > arg.t:
-                y = int(np.argmax(pred))
-                file.write("id" + str(idx) + "->prediction:" + str(y) +"\n")
+with open("prediction/early_stop.txt", 'w') as stop:
+    with open("prediction/result.txt", 'w') as file:
+        idx = 1
+        prediction = []
+        with torch.no_grad():
+            for (feature, label) in zip(val_feature, val_label):
+                pred = cnn(torch.unsqueeze(feature.cuda(), 0))
+                pred = pred.cpu().detach().numpy()[0]
+                pred = softmax(pred)
+                if max(pred) > args.t:
+                    y = int(np.argmax(pred))
+                    file.write(str(idx) + "->" + str(y) +"\n")
+                else:
+                    stop.write(str(idx)+"\n")
                 idx+=1
 
