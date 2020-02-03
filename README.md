@@ -17,7 +17,9 @@ If you want to use the pre-trained model, please download the 'pkl' folder and m
 
 1. Put your reads set into validation folder in 'Classifier'
 2. Run `bash code/pre_train_script.sh`. The script will run the pre-processing code one by one. If there is no error shown on your screen, you can move on.
-3. Run `python show_result.py --gpus gpu_id --n num_of_class --kmers list_of_kmers --t threshold --embed embed_params --classifier classifier_params` in 'Classifier' folder. Then it will output a 'result.txt' file shows the taxa of each read.
+3. Run `python show_result.py --gpus gpu_id --n num_of_class --kmers list_of_kmers --t threshold --embed embed_params --classifier classifier_params` in 'Classifier' folder. Then it will output a 'result.txt' file, which shows the taxa of each read, in **prediction** folder.
+4. Run `python split_data.py --input raw_reads_path` in 'Classifier' folder. Then it will output fasta files containing reads with same class in **prediction** folder.
+5. If you want to continue the next taxa level, please use the output from step 4 and re-run step 1-3.
 
 Detailed information of 'show_result.py'
 There are six input parameters for 'show_result.py':
