@@ -36,7 +36,7 @@ If you want to train a new classifier on your own training set, you can remove t
 
 1. Put your training set into train folder and validation set into validation folder in 'Classifier'. 
 2. Run `bash code/re_train_script.sh`. The script will run the pre-processing code one by one. If there is no error shown on your screen, you can move on.
-3. Run `python train.py --gpus gpu_id --n num_of_class --kmers list_of_kmers --t threshold --embed embed_params --classifier classifier_params` in 'Classifier' folder. Then it will output a 'result.txt' file shows the taxa of each read.
+3. Run `python train.py --gpus gpu_id --n num_of_class --kmers list_of_kmers --weight weight_for_each_class --embed embed_params --classifier classifier_params` in 'Classifier' folder. Then it will output a 'result.txt' file shows the taxa of each read.
 
 Detailed information of 'show_result.py'
 There are six input parameters for 'show_result.py':
@@ -46,6 +46,6 @@ There are six input parameters for 'show_result.py':
 4. lr: threshold for the SoftMax layer. Default is 0.6
 5. epoch: number of epoch for training. Default is 5
 6. embed: the pkl file for embedding layer.
-7. weight: if your dataset are unbalanced, you can use this params to train the model. 'Weight' stands for the coefficient of each class, so the size of the weight list should be equal to the number of class. Default: [1, 1, 1, 1, 1]
+7. weight: if your dataset are unbalanced, you can use this params to train the model. 'Weight' stands for the coefficient of each class, so the size of the weight list should be equal to the number of class. Default: '1, 1, 1, 1, 1'
 
 
