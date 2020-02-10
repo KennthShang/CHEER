@@ -1,7 +1,7 @@
 rm validation/*
 rm train/*
-rm stride0_val/*
-rm stride0_train/*
+rm stride50_val/*
+rm stride50_train/*
 rm int_val/*
 rm int_train/*
 rm filtered_val/*
