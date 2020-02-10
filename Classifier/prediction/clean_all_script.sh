@@ -1,9 +1,0 @@
-rm validation/*
-rm train/*
-rm stride0_val/*
-rm stride0_train/*
-rm int_val/*
-rm int_train/*
-rm filtered_val/*
-rm filtered_train/*
-rm dataset/*
