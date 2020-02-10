@@ -24,7 +24,7 @@ def filter_reads(pos, file_name):
 
 
 if __name__ == "__main__":
-    load_path = "stride0_val/"
+    load_path = "stride50_val/"
     
     name_list = os.listdir(load_path)
     for name in name_list:

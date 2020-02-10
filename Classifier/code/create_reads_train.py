@@ -26,7 +26,7 @@ def create_reads(file_name):
 
             reads.append(genome[i:i+250])
 
-    with open("../stride0_train/"+file_name, 'w') as file:
+    with open("../stride50_train/"+file_name, 'w') as file:
         for read in reads:
             file.write(read +'\n')
         file.close()
