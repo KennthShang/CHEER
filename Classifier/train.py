@@ -135,7 +135,7 @@ for epoch in range(args.epoch):
     print("Validation acc: " +str(acc)[:4])
     if acc > max_acc_val:
         max_acc_val = acc
-        torch.save(net.state_dict(), 'Picornavirales_params.pkl')
+        torch.save(net.state_dict(), 'Params.pkl')
         print("params stored!")
 
 
