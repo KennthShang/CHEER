@@ -17,7 +17,7 @@ int_to_vocab = {ii: word for ii, word in enumerate(k_list)}
 vocab_to_int = {word: ii for ii, word in int_to_vocab.items()}
 
 def encode(file_name):
-    file = open("../filtered_train/"+file_name) 
+    file = open("filtered_train/"+file_name) 
     data = file.readlines() 
     feature = []
     for read in data:
@@ -29,11 +29,11 @@ def encode(file_name):
             int_read.append(vocab_to_int[read[i:i+3]])
         feature.append(int_read)
     name = file_name.split(".")[0]
-    np.savetxt("../int_train/"+name+".csv", feature, delimiter=",", fmt='%d')
+    np.savetxt("int_train/"+name+".csv", feature, delimiter=",", fmt='%d')
 
 
 if __name__ == "__main__":
-    Load_path = "../filtered_train"
+    Load_path = "filtered_train"
     name_list = os.listdir(Load_path)
     for name in name_list:
         encode(name)
