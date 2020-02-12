@@ -18,8 +18,8 @@ parser.add_argument('--gpus', type=int, default = 1)
 parser.add_argument('--num_class', type=int, default=5)
 parser.add_argument('--kmers', type=str, default='3,7,11,15')
 parser.add_argument('--t', type=float, default=0.6)
-parser.add_argument('--embed', type=string, default="embed.pkl")
-parser.add_argument('--classifier', type=string, default="Reject_params.pkl")
+parser.add_argument('--embed', type=str, default="embed.pkl")
+parser.add_argument('--classifier', type=str, default="Reject_params.pkl")
 args = parser.parse_args()
 
 kmers = args.kmers
