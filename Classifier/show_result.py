@@ -73,7 +73,7 @@ val_feature = val_feature.reshape(len(val_feature), 1, 248, 100)
 def softmax(x):
     return np.exp(x)/sum(np.exp(x))
 
-with open("result.txt", 'w') as file:
+with open("prediction/result.txt", 'w') as file:
     idx = 1
     prediction = []
     with torch.no_grad():
