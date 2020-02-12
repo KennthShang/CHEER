@@ -81,7 +81,7 @@ with open("result.txt", 'w') as file:
             pred = cnn(torch.unsqueeze(feature.cuda(), 0))
             pred = pred.cpu().detach().numpy()[0]
             pred = softmax(pred)
-            if max(pred) > arg.t:
+            if max(pred) > args.t:
                 y = int(np.argmax(pred))
                 file.write("id:" + str(idx) + "-> prediction:" + str(y))
                 idx+=1
