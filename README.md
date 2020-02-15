@@ -17,7 +17,7 @@ If you want to use the pre-trained model, please download the 'pkl' folder and m
 
 1. Put your reads set into validation folder in 'Classifier'
 2. Run `bash code/pre_train_script.sh`. The script will run the pre-processing code one by one. If there is no error shown on your screen, you can move on.
-3. Run `python show_result.py --gpus gpu_id --n num_of_class --kmers list_of_kmers --t threshold --embed embed_params --classifier classifier_params` in 'Classifier' folder. Then it will output a 'result.txt' file, which shows the taxa of each read, in **prediction** folder.
+3. Run `python show_result.py --gpus gpu_id --n num_of_class --kmers list_of_kmers --t threshold --embed embed_params --classifier classifier_params` in 'Classifier' folder. Then it will output two files named: **early_stop.txt** and **result.txt**. The format of these two files are **reads_id->label**. You can find the label in "pkl/corresponding id.xlsx" for each classifier.
 4. Run `python split_data.py --input raw_reads_path` in 'Classifier' folder. Then it will output fasta files containing reads with same class in **prediction** folder.
 5. If you want to continue the next taxa level, please use the output from step 4 and re-run step 1-3.
 
@@ -38,7 +38,7 @@ If you want to train a new classifier on your own training set, you can remove t
 2. Run `bash code/re_train_script.sh`. The script will run the pre-processing code one by one. If there is no error shown on your screen, you can move on.
 3. Run `python train.py --gpus gpu_id --n num_of_class --kmers list_of_kmers --weight weight_for_each_class --embed embed_params --classifier classifier_params` in 'Classifier' folder. Then it will output a 'result.txt' file shows the taxa of each read.
 
-Detailed information of 'show_result.py'
+Detailed information of 'train.py'
 There are six input parameters for 'show_result.py':
 1. gpus: the id of gpu on your computer. Default is 1.
 2. n: number of class of this classifier. This depending on which classifier you are using. You can check the supplymentary file in the paper for the n. Default is 5.
@@ -47,5 +47,6 @@ There are six input parameters for 'show_result.py':
 5. epoch: number of epoch for training. Default is 5
 6. embed: the pkl file for embedding layer.
 7. weight: if your dataset are unbalanced, you can use this params to train the model. 'Weight' stands for the coefficient of each class, so the size of the weight list should be equal to the number of class. Default: '1, 1, 1, 1, 1'
+
 
 
