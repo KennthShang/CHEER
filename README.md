@@ -13,7 +13,7 @@ Also, you can re-train CHEER on your own dataset. There are two types of paramet
 
 
 ## Use the pre-trained model
-If you want to use the pre-trained model, please download the 'pkl' folder and make sure the pre-trained pkl files are in the folder. Then you can run CHEER follow the precedure shown bellow:
+If you want to use the pre-trained model, please download the 'pkl' folder and make sure the pre-trained pkl files are in the folder. Then you can run CHEER follow the precedure shown bellow, make sure that at the every begining, you need to run `bash clean_all_script.sh` to clean the folder:
 
 1. Put your reads set into validation folder in 'Classifier'
 2. Run `bash code/pre_train_script.sh`. The script will run the pre-processing code one by one. If there is no error shown on your screen, you can move on.
