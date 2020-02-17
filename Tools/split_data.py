@@ -19,12 +19,14 @@ with open("prediction/result.txt") as file_in:
             data[class_] = []
 
         data[class_].append(id_)
+        
 
 with open(raw_file) as file_in:
     raw = file_in.readlines()
     for i in range(len(data.keys())):
         with open("prediction/subset_"+str(i)+".fasta", 'w') as file_out:
             for item in data[i]:
+                file_out.write(">"+str(item)+"\n")
                 file_out.write(raw[item-1])
 
 with open(raw_file) as file_in:
@@ -33,5 +35,6 @@ with open(raw_file) as file_in:
         with open("prediction/early_stop.fasta", 'w') as file_out:
             for line in stop.readlines():
                 id_ = int(line.replace('\n', ''))
+                file_out.write(">"+str(id_)+"\n")
                 file_out.write(raw[id_-1])
             
