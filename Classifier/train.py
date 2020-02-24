@@ -45,7 +45,7 @@ def accuracy(pred, label):
 """
 
 torch_embeds = nn.Embedding(64, 100)
-torch_embeds.load_state_dict(torch.load('../embed.pkl'))
+torch_embeds.load_state_dict(torch.load(args.embed))
 torch_embeds.weight.requires_grad=False
 
 
