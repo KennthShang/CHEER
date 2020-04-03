@@ -28,7 +28,7 @@ There are six input parameters for 'show_result.py':
 3. kmers: a list for the size of different kmers used in the classifier. In the pre-trained model, the default is [3, 7, 11, 15].
 4. t: threshold for the SoftMax layer. Default is 0.6
 5. embed: the pkl file for embedding layer
-6. classifier: the pkl file for the classifier
+6. classifier: the pkl file for the classifier 
 
 
 ## Train a new classifier
