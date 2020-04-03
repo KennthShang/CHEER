@@ -39,7 +39,7 @@ If you want to train a new classifier on your own training set, you can remove t
 3. Run `python train.py --gpus gpu_id --n num_of_class --kmers list_of_kmers --weight weight_for_each_class --embed embed_params --classifier classifier_params` in 'Classifier' folder. Then it will output a 'result.txt' file shows the taxa of each read.
 
 Detailed information of 'train.py'
-There are six input parameters for 'show_result.py':
+There are six input parameters for 'train.py':
 1. gpus: the id of gpu on your computer. Default is 1.
 2. n: number of class of this classifier. This depending on which classifier you are using. You can check the supplymentary file in the paper for the n. Default is 5.
 3. kmers: a list for the size of different kmers used in the classifier. In the pre-trained model, the default is [3, 7, 11, 15].
