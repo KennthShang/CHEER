@@ -1,0 +1,11 @@
+rm validation/*
+rm train/*
+rm stride50_val/*
+rm stride50_train/*
+rm int_val/*
+rm int_train/*
+rm filtered_val/*
+rm filtered_train/*
+rm protein_train/*
+rm protein_val/*
+rm dataset/*
