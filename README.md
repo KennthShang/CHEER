@@ -5,6 +5,15 @@ To use CHEER, you need to have two types of data. (1) reads set, such as viral m
 
 Also, you can re-train CHEER on your own dataset. There are two types of parametrs need to be trained: (1) embedding layer. (2) CNN classifier. You need to train your embedding layer first following the paper, then use this embedding layer in CNN classifier. We provide the training environment for you to simplify the training procedure. 
 
+## New updates
+1. CHEER has been accepted by ELSEVIER METHOD, you can access to the website here: [CHEER: HierarCHical taxonomic classification for viral mEtagEnomic data via deep leaRning](https://doi.org/10.1016/j.ymeth.2020.05.018)
+
+2. Now, if you want to use the pre-trained parameter to make prediction, you can run the whole level classification with only one script and one command. Go to 'Classifier' floder, then run `python main.py`. Please make sure your system is linux or it might throw out error. If your gpu units is unavaliable, it will run in cpu mode with more execution time.
+
+3. A protein-based classifier is avaliable for CHEER, the code is in the "Protein_Classifier" folder. The model will be trained on 6-reading frame and make a prediction for new reads. The running script is the same as the nucl version.
+
+If you have any question, please contact kenneth with email: jyshang2-c@my.cityu.edu.hk or throw an issues on this page. Hope our model can help you and Thanks!
+
 ## Required Dependencies
 1. Python 3.x
 2. numpy
