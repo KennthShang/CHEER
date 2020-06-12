@@ -12,7 +12,7 @@ Also, you can re-train CHEER on your own dataset. There are two types of paramet
 
 3. A protein-based classifier is avaliable for CHEER, the code is in the "Protein_Classifier" folder. The model will be trained on 6-reading frame and make a prediction for new reads. The running script is the same as the nucl version.
 
-If you have any question, please contact kenneth with email: jyshang2-c@my.cityu.edu.hk or throw an issues on this page. Hope our model can help you and Thanks!
+If you have any question, please contact kenneth with email: jyshang2-c@my.cityu.edu.hk or throw an issue on this page. Hope our model can help you and Thanks!
 
 ## Required Dependencies
 1. Python 3.x
