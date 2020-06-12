@@ -37,4 +37,4 @@ if __name__ == "__main__":
     name_list = os.listdir(Load_path)
     for name in name_list:
         encode(name)
-        print(name + " finished")
+        #print(name + " finished")

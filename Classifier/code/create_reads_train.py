@@ -36,5 +36,5 @@ if __name__ == "__main__":
     name_list = os.listdir(path)
     for name in name_list:
         create_reads(name)
-        print(name + " finished")    
+        #print(name + " finished")    
 

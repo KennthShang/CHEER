@@ -1,5 +1,7 @@
 import numpy as np
 import os
+from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
 
 def filter_reads(pos, file_name):
     with open(pos+file_name) as f_in:

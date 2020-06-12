@@ -27,6 +27,15 @@ def encode(file_name):
             if i + 3 > len(read):
                 break
             int_read.append(vocab_to_int[read[i:i+3]])
+        
+        
+        while len(int_read) < 248:
+            print("less than 250bp: Padding")
+            int_read.append(64)
+        
+        if len(int_read) != 248:
+            print("error length")
+        
         feature.append(int_read)
     name = file_name.split(".")[0]
     np.savetxt("int_val/"+name+".csv", feature, delimiter=",", fmt='%d')
@@ -37,4 +46,4 @@ if __name__ == "__main__":
     name_list = os.listdir(Load_path)
     for name in name_list:
         encode(name)
-        print(name + " finished")
+        #print(name + " finished")

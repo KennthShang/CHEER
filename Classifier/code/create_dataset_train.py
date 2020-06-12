@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
         cnt += 1
 
-        print(name + " finished !")
+        #print(name + " finished !")
 
     data = np.concatenate(data, axis=0)
     
