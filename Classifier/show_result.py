@@ -33,7 +33,11 @@ kmers = list(map(int, kmers))
                 Load Trained Model
 ===========================================================
 """
-torch.cuda.set_device(args.gpus)
+if torch.cuda.is_available():
+    torch.cuda.set_device(args.gpus)
+else:
+    print("Running with cpu")
+
 cnn = Wcnn.WCNN(num_token=100,num_class=args.n,kernel_sizes=kmers, kernel_nums=[256, 256, 256, 256])
 #cnn = Wcnn.WCNN(num_token=100,num_class=20,kernel_sizes=[3, 7, 11, 15], kernel_nums=[256, 256, 256, 256], seq_len=244)
 pretrained_dict=torch.load(args.classifier, map_location='cpu')
@@ -41,7 +45,8 @@ cnn.load_state_dict(pretrained_dict)
 
 # Evaluation mode
 cnn = cnn.eval()
-cnn = cnn.cuda()
+if torch.cuda.is_available():
+    cnn = cnn.cuda()
 
 # Load embedding
 torch_embeds = nn.Embedding(65, 100)
@@ -86,8 +91,12 @@ with open("prediction/result.txt", 'w') as file:
     prediction = []
     with torch.no_grad():
         for (feature, label) in zip(val_feature, val_label):
-            pred = cnn(torch.unsqueeze(feature.cuda(), 0))
-            pred = pred.cpu().detach().numpy()[0]
+            if torch.cuda.is_available():
+                pred = cnn(torch.unsqueeze(feature.cuda(), 0))
+                pred = pred.cpu().detach().numpy()[0]
+            else:
+                pred = cnn(torch.unsqueeze(feature, 0))
+                pred = pred.detach().numpy()[0]
             pred = softmax(pred)
             if max(pred) > args.t:
                 y = int(np.argmax(pred))
