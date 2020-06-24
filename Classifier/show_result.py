@@ -73,9 +73,9 @@ val_feature = torch.from_numpy(val_feature).long()
 val_label = torch.from_numpy(val_label).float()
 val_feature = torch_embeds(val_feature)
 if val_feature.reshape(-1).shape[0] == 24800:
-    val_feature = val_feature.reshape(1, 1, 998, 100)
+    val_feature = val_feature.reshape(1, 1, 248, 100)
 else:
-    val_feature = val_feature.reshape(len(val_feature), 1, 998, 100)
+    val_feature = val_feature.reshape(len(val_feature), 1, 248, 100)
 
 
 """
