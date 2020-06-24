@@ -8,7 +8,6 @@ os.system("bash code/pre_train_script.sh")
 os.system("python show_result.py --gpus 0 --n 2 --t 0.6 --embed ../pkl/rejection/embed.pkl --classifier ../pkl/rejection/Reject_params.pkl --rejection Y")
 os.system("python split_data.py --path non_rna --dir rna non_rna --child_list rna non_rna")
 tmp = os.listdir("prediction")
-os.system("mv split_long_reads_val/virus.confirmed.contig.fa virus.confirmed.contig.fa")
 if "early_stop.fasta" in tmp:
     os.system("mv prediction/early_stop.fasta prediction/non_rna/")
 print("Rejection layer finished!!!")
