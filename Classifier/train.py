@@ -18,7 +18,7 @@ parser.add_argument('--n', type=int, default=5)
 parser.add_argument('--kmers', type=str, default='3,7,11,15')
 parser.add_argument('--lr', type=str, default=0.001)
 parser.add_argument('--epoch', type=str, default=5)
-parser.add_argument('--embed', type=str, default='embed.pkl')
+#parser.add_argument('--embed', type=str, default='embed.pkl')
 parser.add_argument('--weight', type=str, default='1,1,1,1,1')
 args = parser.parse_args()
 
@@ -44,9 +44,11 @@ def accuracy(pred, label):
 ===============================================================
 """
 
-torch_embeds = nn.Embedding(64, 100)
-torch_embeds.load_state_dict(torch.load(args.embed))
+torch_embeds = nn.Embedding(65, 100)
 torch_embeds.weight.requires_grad=False
+padding = torch.zeros(100)
+torch_embeds.weight[-1] = padding
+torch.save(torch_embeds.state_dict(), 'Embed.pkl')
 
 
 train = np.genfromtxt('dataset/train.csv', delimiter=',')
@@ -56,13 +58,13 @@ train_feature = train[:, :-1]
 train_feature = torch.from_numpy(train_feature).long()
 train_label = torch.from_numpy(train_label).float()
 train_feature = torch_embeds(train_feature)
-train_feature = train_feature.reshape(len(train_feature), 1, 248, 100)
+train_feature = train_feature.reshape(len(train_feature), 1, 998, 100)
 train_dataset = Data.TensorDataset(train_feature, train_label)
 training_loader = Data.DataLoader(
     dataset=train_dataset,    # torch TensorDataset format
     batch_size=200,           # mini batch size
     shuffle=True,               
-    num_workers=1,              
+    num_workers=0,              
 )
 
 
@@ -73,14 +75,14 @@ val_feature = val[:, :-1]
 val_feature = torch.from_numpy(val_feature).long()
 val_label = torch.from_numpy(val_label).float()
 val_feature = torch_embeds(val_feature)
-val_feature = val_feature.reshape(len(val_feature), 1, 248, 100)
+val_feature = val_feature.reshape(len(val_feature), 1, 998, 100)
 
 val_dataset = Data.TensorDataset(val_feature, val_label)
 validation_loader = Data.DataLoader(
     dataset=val_dataset,      # torch TensorDataset format
     batch_size=200,           # mini batch size
     shuffle=False,               
-    num_workers=1,              
+    num_workers=0,              
 )
 
 
@@ -98,6 +100,8 @@ loss_func = torch.nn.CrossEntropyLoss(torch.tensor(weight).float().cuda())
 net = net.cuda()
 
 max_acc_val = -1
+max_acc_train = -1
+flag = 0
 # Training
 for epoch in range(args.epoch):
     net = net.train()
@@ -121,7 +125,11 @@ for epoch in range(args.epoch):
             prediction = net(batch_x)
             tmp = accuracy(prediction.cpu().detach().numpy(), batch_y.cpu().numpy())
             acc.append(tmp)
-    print("Training loss: " + str(loss.cpu().detach().numpy())[:4] + "\nTraining acc: " +str(np.mean(acc))[:4])
+    train_acc = np.mean(acc)
+    print("Training loss: " + str(loss.cpu().detach().numpy())[:4] + "\nTraining acc: " +str(train_acc)[:4])
+    if train_acc > max_acc_train:
+        max_acc_train = train_acc
+        flag = 1
     # Validation
     with torch.no_grad():
         acc = []
@@ -137,6 +145,11 @@ for epoch in range(args.epoch):
         max_acc_val = acc
         torch.save(net.state_dict(), 'Params.pkl')
         print("params stored!")
+    elif acc == max_acc_val:
+        if flag == 1:
+            torch.save(net.state_dict(), 'Params.pkl')
+            print("params stored!")
+            flag = 0
 
 
 

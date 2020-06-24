@@ -14,8 +14,8 @@ args = parser.parse_args()
 name_list = args.child_list
 dir_list = args.dir
 path = os.getcwd()
-new_name = os.listdir(path+"/split_long_reads_val/")[0]
-new_fasta = list(SeqIO.parse(path+"/split_long_reads_val/"+new_name, "fasta"))
+new_name = os.listdir(path+"/filtered_val/")[0]
+new_fasta = list(SeqIO.parse(path+"/filtered_val/"+new_name, "fasta"))
 ori_name = os.listdir(path+"/validation/")[0]
 ori_fasta = list(SeqIO.parse(path+"/validation/"+ori_name, "fasta"))
 
@@ -46,8 +46,12 @@ with open("result.txt") as file_in:
 
 
 # combine short reads prediction for original reads
+too_short_reads = []
 for record in ori_fasta:
     key = record.id
+    if key not in fasta_id.keys():
+        too_short_reads.append(key)
+        continue
     nums = fasta_id[key]
     counts = np.bincount(nums)
     id_to_pred[key] = np.argmax(counts)
@@ -57,14 +61,19 @@ for record in ori_fasta:
     
 # write the early stop reads
 flag = 0
-with open("early_stop.fasta", "w") as output_handle:
-    for record in ori_fasta:
-        if id_to_pred[record.id] == 0:
-            record.description = args.path
-            SeqIO.write(record, output_handle, "fasta")
-            flag = 1
-if flag == 0:
-    os.system("rm early_stop.fasta")
+with open("error_reads.fasta", "w") as short_handle:
+    with open("early_stop.fasta", "w") as output_handle:
+        for record in ori_fasta:
+            if record.id in too_short_reads:
+                record.description = "Too_short_or_error"
+                SeqIO.write(record, short_handle, "fasta")
+                
+            elif id_to_pred[record.id] == 0:
+                record.description = args.path
+                SeqIO.write(record, output_handle, "fasta")
+                flag = 1
+    if flag == 0:
+        os.system("rm early_stop.fasta")
 
         
 # write other reads into different class folder
@@ -75,6 +84,8 @@ for i in num_class:
     os.system("mkdir "+dir_list[i-1])
     with open(dir_list[i-1]+"/"+name_list[i-1]+".fasta", 'w') as file_out:
         for record in ori_fasta:
+            if record.id in too_short_reads:
+                continue
             if id_to_pred[record.id] == i:
                 record.description = dir_list[i-1]
                 SeqIO.write(record, file_out, "fasta")
