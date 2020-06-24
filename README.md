@@ -10,7 +10,9 @@ Also, you can re-train CHEER on your own dataset. There are two types of paramet
 
 2. Now, if you want to use the pre-trained parameter to make prediction, you can run the whole level classification with only one script and one command. Go to 'Classifier' floder, then run `python main.py`. Please make sure your system is linux or it might throw out error. If your gpu units is unavaliable, it will run in cpu mode with more execution time.
 
-3. A protein-based classifier is avaliable for CHEER, the code is in the "Protein_Classifier" folder. The model will be trained on 6-reading frame and make a prediction for new reads. The running script is the same as the nucl version.
+3. Because the pre_trained params are trained on 250bp reads, we offer two option for you to use CHEER. First, if the length of the reads > 240bp, our model can pad zero for the short reads and split the long reads so that all reads will be 250bp. Then majority voting will be applied to give the final prediction. Second, you need to re_train the classifier yourself, but you can directly use the Embed.pkl as your embedding layer (the length of the reads won't influent the embedding layer).
+
+4. A protein-based classifier is avaliable for CHEER, the code is in the "Protein_Classifier" folder. The model will be trained on 6-reading frame and make a prediction for new reads. The running script is the same as the nucl version.
 
 If you have any question, please contact kenneth with email: jyshang2-c@my.cityu.edu.hk or throw an issue on this page. Hope our model can help you and Thanks!
 
