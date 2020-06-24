@@ -30,13 +30,13 @@ def encode(file_name):
             int_read.append(vocab_to_int[read[i:i+3]])
         
         
-        if len(int_read) < 998:
+        if len(int_read) < 248:
             print("less than 1000bp: Padding")
 
-        while len(int_read) < 998:
+        while len(int_read) < 248:
             int_read.append(64)
         
-        if len(int_read) != 998:
+        if len(int_read) != 248:
             print("error length")
         
         feature.append(int_read)
