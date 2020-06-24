@@ -4,25 +4,27 @@ from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
 
 def create_reads(file_name):
-
     new_record = []
     for record in SeqIO.parse("validation/"+file_name, "fasta"):
         seq = record.seq
-        if len(seq) > 300:
+        if len(seq) > 1000:
             for i in range(0, len(seq), 50):
-                if i + 250 > len(seq):
-                    new_seq = seq[-250:]
+                if i + 1000 > len(seq):
+                    new_seq = seq[-1000:]
                     rec = SeqRecord(new_seq, id=record.id, description=record.description, name=record.name)
                     new_record.append(rec)
                     break
                 
-                new_seq = seq[i:i+250]
+                new_seq = seq[i:i+1000]
                 rec = SeqRecord(new_seq, id=record.id, description=record.description, name=record.name)
                 new_record.append(rec)
-        elif len(seq) > 240:
+        elif len(seq) > 500:
             new_seq = seq[:250]
             rec = SeqRecord(new_seq, id=record.id, description=record.description, name=record.name)
             new_record.append(rec)
+        else:
+            print("error")
+            print(record.description)
             
             
     SeqIO.write(new_record, "split_long_reads_val/"+file_name, "fasta")

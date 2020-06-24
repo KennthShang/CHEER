@@ -17,7 +17,7 @@ int_to_vocab = {ii: word for ii, word in enumerate(k_list)}
 vocab_to_int = {word: ii for ii, word in int_to_vocab.items()}
 
 def encode(file_name):
-    file = open("filtered_val/"+file_name) 
+    file = open("stride50_val/"+file_name) 
     data = file.readlines() 
     feature = []
     for read in data:
@@ -26,14 +26,17 @@ def encode(file_name):
         for i in range(len(read)):
             if i + 3 > len(read):
                 break
+                
             int_read.append(vocab_to_int[read[i:i+3]])
         
         
-        while len(int_read) < 248:
-            print("less than 250bp: Padding")
+        if len(int_read) < 998:
+            print("less than 1000bp: Padding")
+
+        while len(int_read) < 998:
             int_read.append(64)
         
-        if len(int_read) != 248:
+        if len(int_read) != 998:
             print("error length")
         
         feature.append(int_read)
@@ -42,7 +45,7 @@ def encode(file_name):
 
 
 if __name__ == "__main__":
-    Load_path = "filtered_val"
+    Load_path = "stride50_val/"
     name_list = os.listdir(Load_path)
     for name in name_list:
         encode(name)
