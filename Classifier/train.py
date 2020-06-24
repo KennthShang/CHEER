@@ -58,7 +58,7 @@ train_feature = train[:, :-1]
 train_feature = torch.from_numpy(train_feature).long()
 train_label = torch.from_numpy(train_label).float()
 train_feature = torch_embeds(train_feature)
-train_feature = train_feature.reshape(len(train_feature), 1, 998, 100)
+train_feature = train_feature.reshape(len(train_feature), 1, 248, 100)
 train_dataset = Data.TensorDataset(train_feature, train_label)
 training_loader = Data.DataLoader(
     dataset=train_dataset,    # torch TensorDataset format
@@ -75,7 +75,7 @@ val_feature = val[:, :-1]
 val_feature = torch.from_numpy(val_feature).long()
 val_label = torch.from_numpy(val_label).float()
 val_feature = torch_embeds(val_feature)
-val_feature = val_feature.reshape(len(val_feature), 1, 998, 100)
+val_feature = val_feature.reshape(len(val_feature), 1, 248, 100)
 
 val_dataset = Data.TensorDataset(val_feature, val_label)
 validation_loader = Data.DataLoader(
