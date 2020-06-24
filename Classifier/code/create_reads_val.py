@@ -7,23 +7,23 @@ def create_reads(file_name):
     new_record = []
     for record in SeqIO.parse("validation/"+file_name, "fasta"):
         seq = record.seq
-        if len(seq) > 1000:
+        if len(seq) > 250:
             for i in range(0, len(seq), 50):
-                if i + 1000 > len(seq):
-                    new_seq = seq[-1000:]
+                if i + 250 > len(seq):
+                    new_seq = seq[-250:]
                     rec = SeqRecord(new_seq, id=record.id, description=record.description, name=record.name)
                     new_record.append(rec)
                     break
                 
-                new_seq = seq[i:i+1000]
+                new_seq = seq[i:i+250]
                 rec = SeqRecord(new_seq, id=record.id, description=record.description, name=record.name)
                 new_record.append(rec)
-        elif len(seq) > 500:
+        elif len(seq) > 240:
             new_seq = seq[:250]
             rec = SeqRecord(new_seq, id=record.id, description=record.description, name=record.name)
             new_record.append(rec)
         else:
-            print("error")
+            print("error length < 240bp")
             print(record.description)
             
             
