@@ -17,8 +17,8 @@ parser.add_argument('--gpus', type=int, default = 1)
 parser.add_argument('--n', type=int, default=5)
 parser.add_argument('--kmers', type=str, default='3,7,11,15')
 parser.add_argument('--lr', type=str, default=0.001)
-parser.add_argument('--epoch', type=str, default=5)
-#parser.add_argument('--embed', type=str, default='embed.pkl')
+parser.add_argument('--epoch', type=int, default=5)
+parser.add_argument('--embed', type=str, default='embed.pkl')
 parser.add_argument('--weight', type=str, default='1,1,1,1,1')
 args = parser.parse_args()
 
@@ -45,10 +45,10 @@ def accuracy(pred, label):
 """
 
 torch_embeds = nn.Embedding(65, 100)
+embed_dict=torch.load(args.embed, map_location='cpu')
+torch_embeds.load_state_dict(embed_dict)
 torch_embeds.weight.requires_grad=False
-padding = torch.zeros(100)
-torch_embeds.weight[-1] = padding
-torch.save(torch_embeds.state_dict(), 'Embed.pkl')
+
 
 
 train = np.genfromtxt('dataset/train.csv', delimiter=',')
