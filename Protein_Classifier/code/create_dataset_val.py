@@ -16,8 +16,6 @@ if __name__ == '__main__':
 
     for name in name_list:
         read = np.genfromtxt(Load_path+name, delimiter=',')
-        np.random.shuffle(read)
-
 
         label = np.zeros(len(read)) + cnt
         
@@ -27,8 +25,8 @@ if __name__ == '__main__':
         data.append(read)
         cnt += 1
 
-        print(name + " finished !")
+        #print(name + " finished !")
 
     data = np.concatenate(data, axis=0)
-    
+     
     np.savetxt("dataset/val.csv", data, delimiter=",", fmt='%d')

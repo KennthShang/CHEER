@@ -42,12 +42,12 @@ class WCNN(nn.Module):
         self.out = nn.Linear(num_fc2, self.num_class)
 
     def forward(self, x):
-        x1 = x[:,0,:,:].reshape(len(x), 1, 82, 100)
-        x2 = x[:,1,:,:].reshape(len(x), 1, 82, 100)
-        x3 = x[:,2,:,:].reshape(len(x), 1, 82, 100)
-        x4 = x[:,3,:,:].reshape(len(x), 1, 82, 100)
-        x5 = x[:,4,:,:].reshape(len(x), 1, 82, 100)
-        x6 = x[:,5,:,:].reshape(len(x), 1, 82, 100)
+        x1 = x[:,0,:,:].reshape(len(x), 1, -1, 100)
+        x2 = x[:,1,:,:].reshape(len(x), 1, -1, 100)
+        x3 = x[:,2,:,:].reshape(len(x), 1, -1, 100)
+        x4 = x[:,3,:,:].reshape(len(x), 1, -1, 100)
+        x5 = x[:,4,:,:].reshape(len(x), 1, -1, 100)
+        x6 = x[:,5,:,:].reshape(len(x), 1, -1, 100)
         
         
         

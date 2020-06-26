@@ -34,7 +34,7 @@ def func1(dna):
     return "".join(protein)
 
 def dna2protein(file_name):
-    with open("filtered_val/"+file_name) as file_in:
+    with open("stride50_val/"+file_name) as file_in:
         with open("protein_val/"+file_name, 'w') as file_out:
             reads = file_in.readlines()
             for read in reads:
@@ -52,12 +52,11 @@ def dna2protein(file_name):
                 ldna4=func1(rdna)[:-1]
                 ldna5=func1(dna3)[:-1]
                 ldna6=func1(dna4)
-
                 protein = ldna1+ldna2+ldna3+ldna4+ldna5+ldna6
                 file_out.write(protein+"\n")
         
 if __name__ == "__main__":
-    path = "filtered_val/"
+    path = "stride50_val/"
     name_list = os.listdir(path)
     for name in name_list:
         dna2protein(name)

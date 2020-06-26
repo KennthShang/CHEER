@@ -34,7 +34,7 @@ def func1(dna):
     return "".join(protein)
 
 def dna2protein(file_name):
-    with open("filtered_train/"+file_name) as file_in:
+    with open("stride50_train/"+file_name) as file_in:
         with open("protein_train/"+file_name, 'w') as file_out:
             reads = file_in.readlines()
             for read in reads:
@@ -56,7 +56,7 @@ def dna2protein(file_name):
                 file_out.write(protein+"\n")
         
 if __name__ == "__main__":
-    path = "filtered_train/"
+    path = "stride50_train/"
     name_list = os.listdir(path)
     for name in name_list:
         dna2protein(name)
