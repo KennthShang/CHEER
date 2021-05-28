@@ -57,8 +57,6 @@ train_feature = train[:, :-1]
 
 train_feature = torch.from_numpy(train_feature).long()
 train_label = torch.from_numpy(train_label).float()
-train_feature = torch_embeds(train_feature)
-train_feature = train_feature.reshape(len(train_feature), 1, 248, 100)
 train_dataset = Data.TensorDataset(train_feature, train_label)
 training_loader = Data.DataLoader(
     dataset=train_dataset,    # torch TensorDataset format
@@ -74,9 +72,6 @@ val_feature = val[:, :-1]
 
 val_feature = torch.from_numpy(val_feature).long()
 val_label = torch.from_numpy(val_label).float()
-val_feature = torch_embeds(val_feature)
-val_feature = val_feature.reshape(len(val_feature), 1, 248, 100)
-
 val_dataset = Data.TensorDataset(val_feature, val_label)
 validation_loader = Data.DataLoader(
     dataset=val_dataset,      # torch TensorDataset format
@@ -90,7 +85,6 @@ validation_loader = Data.DataLoader(
 ===============================================================
                         Model Part
 ===============================================================
-
 """
 # CrossEntropyLoss
 torch.cuda.set_device(args.gpus)
@@ -107,6 +101,8 @@ for epoch in range(args.epoch):
     net = net.train()
     acc = []
     for step, (batch_x, batch_y) in enumerate(training_loader): 
+        batch_x = torch_embeds(batch_x)
+        batch_x = batch_x.reshape(len(batch_x), 1, 248, 100)
         batch_x = batch_x.cuda()
         batch_y = batch_y.cuda()
         # Predict
@@ -120,6 +116,8 @@ for epoch in range(args.epoch):
     with torch.no_grad():
         acc = []
         for step, (batch_x, batch_y) in enumerate(training_loader): 
+            batch_x = torch_embeds(batch_x)
+            batch_x = batch_x.reshape(len(batch_x), 1, 248, 100)
             batch_x = batch_x.cuda()
             batch_y = batch_y.cuda()
             prediction = net(batch_x)
@@ -133,7 +131,9 @@ for epoch in range(args.epoch):
     # Validation
     with torch.no_grad():
         acc = []
-        for step, (batch_x, batch_y) in enumerate(validation_loader): 
+        for step, (batch_x, batch_y) in enumerate(validation_loader):
+            batch_x = torch_embeds(batch_x)
+            batch_x = batch_x.reshape(len(batch_x), 1, 248, 100)
             batch_x = batch_x.cuda()
             batch_y = batch_y.cuda()
             prediction = net(batch_x)
@@ -150,7 +150,3 @@ for epoch in range(args.epoch):
             torch.save(net.state_dict(), 'Params.pkl')
             print("params stored!")
             flag = 0
-
-
-
-
